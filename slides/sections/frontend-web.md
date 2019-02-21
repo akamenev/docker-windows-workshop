@@ -1,4 +1,4 @@
-﻿# Building and Running ASP.NET WebForms Apps in Docker
+﻿# Сборка и Запуска ASP.NET WebForms Приложения в Docker
 
 ---
 
