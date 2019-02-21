@@ -1,8 +1,8 @@
-﻿# Switching to Asynchronous Messaging
+﻿# Переход на асинхронные сообщения
 
 ---
 
-<section data-background-image="/img/backend/Slide2.png">
+<section data-background-image="https://github.com/akamenev/docker-windows-workshop/blob/master/slides/img/backend/Slide2.PNG?raw=true">
 
 ---
 
