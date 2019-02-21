@@ -1,8 +1,8 @@
-﻿# Breaking Out a Reference Data API
+﻿# Выделение Data Reference API
 
 ---
 
-<section data-background-image="/img/backend/Slide1.png">
+<section data-background-image="https://github.com/akamenev/docker-windows-workshop/blob/master/slides/img/backend/Slide1.PNG?raw=true">
 
 ---
 
