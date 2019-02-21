@@ -6,11 +6,11 @@
 
 ### Pre-requisites
 
-You will be provided with a virtual machine which is already prepped for the lab.
+Вам будет предоставлена уже подготовленная виртуальная машина.
 
-You will build images and push them to Docker Hub during the workshop, so they are available to use later. You'll need a Docker ID to push images.
+Вы будете собирать и публиковать образы контейнеров в Docker Hub во время воркшопа, для этого вам потребуется Docker ID.
 
-- Sign up for a free Docker ID on [Docker Hub](https://hub.docker.com)
+- Получить Docker ID можно здесь [Docker Hub](https://hub.docker.com)
 
 ---
 
