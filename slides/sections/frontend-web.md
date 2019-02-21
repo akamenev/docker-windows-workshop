@@ -2,7 +2,7 @@
 
 ---
 
-<section data-background-image="/img/frontend/Slide1.png">
+<section data-background-image="https://github.com/sixeyed/docker-windows-workshop/blob/dceu18/slides/img/frontend/Slide1.PNG?raw=true">
 
 ---
 
