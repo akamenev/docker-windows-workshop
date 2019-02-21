@@ -85,8 +85,7 @@ docker image build `
 
 ## Обновитесь для использования новой домашней страницы
 
-Посмотрите на [v2 manifest](https://github.com/akamenev/docker-windows-workshop/blob/master/app/v2.yml) - он добавляет новые сервисы - homepage и reverse-proxy
-
+Посмотрите на [v2 manifest](https://github.com/akamenev/docker-windows-workshop/blob/master/app/v2.yml) - он добавляет новые сервисы - homepage и reverse-proxy.
 Только в прокси указаны порты. Это публичная точка входа для приложения, остальные контейнеры могут видеть друг друга, но извне их не видно.
 
 _Обновитесь до v2:_
