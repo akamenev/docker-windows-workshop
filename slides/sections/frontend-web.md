@@ -1,4 +1,4 @@
-﻿# Сборка и Запуска ASP.NET WebForms Приложения в Docker
+﻿# Сборка и Запуск ASP.NET WebForms Приложения в Docker
 
 ---
 
