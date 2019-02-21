@@ -71,7 +71,7 @@ firefox "http://$ip"
 
 Мы будем использовать [Nginx](http://nginx.org/en/). Все запросы будут приходить на Nginx, а он будет перенаправлять запросы в зависимости от ситуации.
 
-Nginx позволяет сделать больше - в [конфигурационном файле nginx.conf]https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/reverse-proxy/conf/nginx.conf) мы задаем параметры для кэширования, а также можем настроить SSL-temination
+Nginx позволяет сделать больше - в [конфигурационном файле nginx.conf](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/reverse-proxy/conf/nginx.conf) мы задаем параметры для кэширования, а также можем настроить SSL-temination
 
 _Соберите образ reverse proxy:_
 
