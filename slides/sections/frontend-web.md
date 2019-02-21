@@ -14,7 +14,7 @@
 
 ## Соберем Docker image для приложения
 
-Давайте посмотрим на [Dockerfile](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-web/v1/Dockerfile) для приложения. Она использует Docker, чтобы собрать приложение и упаковать его в образ (image).
+Давайте посмотрим на [Dockerfile](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-web/v1/Dockerfile) для приложения. Он использует Docker, чтобы собрать приложение и упаковать его в образ (image).
 
 _Соберите Docker image:_
 
