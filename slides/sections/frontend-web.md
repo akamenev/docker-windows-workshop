@@ -6,17 +6,17 @@
 
 ---
 
-Our demo app is a simple ASP.NET WebForms app which uses SQL Server for storage. It's a full .NET Framework app, which uses .NET version `4.7.2`.
+Наше демо приложение - простое ASP.NET WebForms приложение, которое использует SQL Server для хранения данных. Приложение целиком написано на .NET Framework `4.7.2`.
 
-Right now the web app is a monolith. By the end of the workshop we'll have broken it down, but first we need to get it running.
+Приложение является монолитом. К концу воркшопа мы разобьем его на отдельные компоненты, но сначала нам нужно его запустить.
 
 ---
 
-## Build the web app image
+## Соберем Docker image для приложения
 
-Check out the [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-web/v1/Dockerfile) for the application. It uses Docker to compile the app from source, and package it into an image.
+Давайте посмотрим на [Dockerfile](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-web/v1/Dockerfile) для приложения. Она использует Docker, чтобы собрать приложение и упаковать его в образ (image).
 
-_Build the image:_
+_Соберите Docker image:_
 
 ```
 cd $env:workshop
@@ -27,11 +27,11 @@ docker image build -t dwwx/signup-web `
 
 ---
 
-## Build a better image
+## Соберем образ получше
 
-The v1 Dockerfile is simple, but inefficient. The [v2 Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-web/v2/Dockerfile) splits the NuGet restore and MSBuild parts - which makes repeated builds faster. And it relays the application log file.
+Первая версия Dockerfile простая, но не очень эффективная. Вторая версия [v2 Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-web/v2/Dockerfile) разделяет NuGet restore и MSBuild части - это позволяет осуществлять сборки быстрее.
 
-_Build the image:_
+_Соберите image:_
 
 ```
 cd $env:workshop
@@ -42,13 +42,13 @@ docker image build -t dwwx/signup-web:v2 `
 
 ---
 
-## Run the web app
+## Запустите приложение
 
-That's it! 
+На этом все! 
 
-You don't need Visual Studio or .NET 4.7.2 installed to build the app, you just need the source repo and Docker. 
+Вам не нужны ни Visual Studio ни .NET 4.7.2, чтобы собрать приложение, все что вам нужно - исходный код и Docker. 
 
-_Try running the app in a container:_
+_Попробуйте запустить приложение в контейнере:_
 
 ```
 docker container run `
@@ -58,11 +58,11 @@ docker container run `
 
 ---
 
-## Try it out
+## Пейредите в приложение
 
-You can browse to port `8020` on your Docker host (that's your Windows Server 2016 VM). Or you can browse direct to the container:
+Вы можете перейти по порту `8020` на самой виртуальной машине с Docker. Или же вы можете перейти по адресу самого контейнера напрямую:
 
-_Get the container's IP address and launch the browser:_
+_Получите IP адрес контейнера и запустите браузер:_
 
 ```
 $ip = docker container inspect `
@@ -73,13 +73,13 @@ firefox "http://$ip/app"
 
 ---
 
-## Tidy up before we try again
+## Удалите контейнер, прежде чем мы попробуем снова
 
-Oops. 
+Упс. 
 
-Remember the app needs SQL Server, and there's no SQL Server on this machine. We'll run it properly next, but first let's clean up that container. 
+Приложению нужен SQL Server, а его на машине нет. Мы его запустим далее, но сперва нужно удалить запущенный контейнер.
 
-_Remove the `app` container:_
+_Удалите `app` контейнер:_
 
 ```
 docker container rm -f app
@@ -87,11 +87,11 @@ docker container rm -f app
 
 ---
 
-## Run the app - with dependencies
+## Запустите приложение, на этот раз с зависимостями
 
-Now  we'll run the database in a container too - using Docker Compose to manage the whole app. Check out the [v1 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v1.yml), it specifies SQL Server and the web app. 
+Теперь мы запустим БД сервер в контейнере, используя Docker Compose для управления всем приложением целиком. Посмотрите на [v1 manifest](https://github.com/akamenev/docker-windows-workshop/blob/master/app/v1.yml), он описывает SQL Server и веб-приложение. 
 
-_Now run the app using compose:_
+_Запустите приложение, используя compose:_
 
 ```
 docker-compose -f .\app\v1.yml up -d
@@ -99,11 +99,11 @@ docker-compose -f .\app\v1.yml up -d
 
 ---
 
-## Check what's running
+## Проверьте, что все работает
 
-You now have two containers running. One is the web app image you've just built from source, and the other is SQL Server from Microsoft's public image.
+Теперь у нас запущено 2 контейнера. В одном находится приложение, которое мы собрали из исходников, во втором находится SQL Server, созданный из публичного Docker образа от Microsoft
 
-_List all the running containers:_
+_Выведите список всех запущенных контейнеров:_
 
 ```
 docker container ls
@@ -111,9 +111,9 @@ docker container ls
 
 ---
 
-## Try the app again
+## Перейдите в веб-приложение
 
-As before, browse to port `8020` on your Docker host or browse direct to the container:
+Как и ранее, перейдите по порту `8020` на виртуальной машине или перейдите напрямую по адресу контейнера:
 
 ```
 $ip = docker container inspect `
@@ -124,11 +124,11 @@ firefox "http://$ip/app"
 
 ---
 
-## Looking better :) 
+## Выглядит лучше 
 
-But let's check it really works. Click the _Sign Up_ button, fill in the form and click _Go!_ to save your details.
+Но давайте проверим, что оно действительно работает. Нажмите кнопку _Sign Up_ , заполните форму и нажмите _Go!_ чтобы сохранить данные о себе.
 
-_Check the data has been saved in the SQL container:_
+_Проверьте, что данные были сохранены в SQL контейнере:_
 
 ```
 docker container exec app_signup-db_1 `
@@ -140,6 +140,6 @@ docker container exec app_signup-db_1 `
 
 ## All good
 
-We're in a good place now. This could be a 10-year old WebForms app, and now you can run it in Docker and move it to the cloud - **no code changes**!
+Выглядит отлично. Это могло быть старое WebForms приложение, написанное 10 лет назад. Теперь вы можете его упаковать в контейнер и переместить в облако - **без изменений кода**!
 
-It's also a great starting point for modernizing the application.
+Это также отличная отправная точка для модернизации приложения.
