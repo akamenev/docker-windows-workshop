@@ -1,26 +1,26 @@
-﻿# Splitting Out the Application Homepage
+﻿# Выделение Homepage из приложения
 
 ---
 
-<section data-background-image="/img/frontend/Slide2.png">
+<section data-background-image="https://github.com/akamenev/docker-windows-workshop/blob/master/slides/img/frontend/Slide2.PNG?raw=true">
 
 ---
 
-Monoliths can run in containers just fine. But they aren't modern apps - they're just old apps running in containers.
+Монолиты могут прекрасно работать в контейнерах, но от этого они не становятся "modern apps" - они просто старые приложения, запущенные в контейнерах.
 
-You can rebuild a monolith into microservices, but that's a long-term project. 
+Вы можете переделать монолитное приложение в микросервисное, но это достаточно длительный процесс. 
 
-We'll do it incrementally instead, by breaking features out of the monolith and running them in separate containers - starting with the app's homepage
+Вместо этого, мы будем идти поступательно, выделяя функционал из монолита и запуская его в отдельных контейнерах. Начнем мы с домашней страницы нашего приложения.
 
 ---
 
-## The new application homepage
+## Новая домашняя страница
 
-Check out [the new homepage](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/homepage/index.html). It's a static HTML site which uses Vue.js - it will run in its own container, so it can use a different technology stack from the main app.
+Посмотрите [новую домашнюю страницу](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/homepage/index.html). Это статичный HTML сайт, который использует Vue.js - он будет работать в отдельном контейнере, что позволяет использовать другой стэк технологий, отличный от основного приложения.
 
-The [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/homepage/Dockerfile) is really simple - it just copies the HTML content into an IIS image.
+[Dockerfile](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/homepage/Dockerfile) очень простой - он просто копирует HTML в образ с IIS.
 
-_Build the homepage image:_
+_Соберите образ с новой домашней страницей:_
 
 ```
 docker image build `
@@ -30,11 +30,11 @@ docker image build `
 
 ---
 
-## Run the new homepage
+## Запустите новую домашнюю страницу
 
-You can run the homepage on its own - great for fast iterating through changes. 
+Теперь вы можете запускать домашнюю страницу отдельно, что позволяет очень быстро вносить изменения. 
 
-_Run the homepage:_
+_Запустите homepage:_
 
 ```
 docker container run -d -p 8040:80 --name home dwwx/homepage
@@ -42,11 +42,11 @@ docker container run -d -p 8040:80 --name home dwwx/homepage
 
 ---
 
-## Try it out
+## Попробуйте на нее перейти
 
-The homepage is available on port `8040` on your Docker host, so you can browse there or direct to the container:
+Домашняя страница доступна на порту `8040` вашей виртуальной машины, вы можете перейти туда или по прямому адресу контейнера:
 
-_Get the homepage container's IP and launch the browser:_
+_Получите IP адрес контейнера и запустите браузер:_
 
 ```
 $ip = docker container inspect `
@@ -57,23 +57,23 @@ firefox "http://$ip"
 
 ---
 
-## Almost there
+## Почти готово
 
-The new homepage looks good, starts quickly and is packaged in a small Nano Server image.
+Новая домашняя страница выглядит отлично, быстро запускается и упакована в небольшой образ с Nano Server.
 
-It doesn't work on its own though - click _Sign Up_ and you'll get an error.
+Однако она не работает сама по себе - нажмите _Sign Up_ и вы получите ошибку.
 
-To use the new homepage **without changing the original app** we can run a reverse proxy in another container.
+Чтобы использовать новую домашнюю страницу **без изменений изначального приложения** мы можем запустить reverse-proxy в отдельном контейнере.
 
 ---
 
 ## The reverse proxy
 
-We're using [Nginx](http://nginx.org/en/). All requests come to Nginx, and it proxies content from the homepage container or the original app container, based on the requested route.
+Мы будем использовать [Nginx](http://nginx.org/en/). Все запросы будут приходить на Nginx, а он будет перенаправлять запросы в зависимости от ситуации.
 
-Nginx can do a lot more than that - in the [nginx.conf configuration file](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/reverse-proxy/conf/nginx.conf) we're setting up caching, and you can also use Nginx for SSL termination.
+Nginx позволяет сделать больше - в [конфигурационном файле nginx.conf]https://github.com/akamenev/docker-windows-workshop/blob/master/docker/frontend-reverse-proxy/reverse-proxy/conf/nginx.conf) мы задаем параметры для кэширования, а также можем настроить SSL-temination
 
-_Build the reverse proxy image:_
+_Соберите образ reverse proxy:_
 
 ```
 docker image build `
@@ -83,25 +83,25 @@ docker image build `
 
 ---
 
-## Upgrade to use the new homepage
+## Обновитесь для использования новой домашней страницы
 
-Check out the [v2 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v2.yml) - it adds services for the homepage and the proxy. 
+Посмотрите на [v2 manifest](https://github.com/akamenev/docker-windows-workshop/blob/master/app/v2.yml) - он добавляет новые сервисы - homepage и reverse-proxy
 
-Only the proxy has `ports` specified. It's the public entrypoint to the app, the other containers can access each other, but the outside world can't get to them.
+Только в прокси указаны порты. Это публичная точка входа для приложения, остальные контейнеры могут видеть друг друга, но извне их не видно.
 
-_Upgrade to v2:_
+_Обновитесь до v2:_
 
 ```
 docker-compose -f .\app\v2.yml up -d
 ```
 
-> Compose compares the running state to the desired state in the manifest and starts new containers. 
+> Compose сравнивает текущее состояние с желаемымым (определенном в манифесте) и запускает новые контейнере. 
 
 ---
 
-## Check out the new integrated app
+## Попробуйте новое приложение
 
-The reverse proxy is published to port `8020`, so you can browse there or to the new Nginx container:
+Reverse proxy опубликована на порту `8020`, можете перейти по нему или по адресу контейнера с Nginx:
 
 ```
 $ip = docker container inspect `
@@ -110,17 +110,17 @@ $ip = docker container inspect `
 firefox "http://$ip"
 ```
 
-> Now you can click through to the original _Sign Up_ page.
+> Теперь вы можете перейти на страницу с _Sign Up_.
 
 ---
 
-## And just to be sure
+## Ну и давайте проверим
 
-Check nothing's broken. 
+Давайте проверим, что ничего не сломалось
 
-Click the _Sign Up!_ button, fill in the form and click _Go!_ to save your details.
+Нажмите на _Sign Up!_, заполните форму и нажмите _Go!_ для сохранения данных.
 
-_Check the new data is there in the SQL container:_
+_Проверьте, что новые данные появились в контейнере с SQL:_
 
 ```
 docker container exec app_signup-db_1 powershell `
@@ -129,10 +129,10 @@ docker container exec app_signup-db_1 powershell `
 
 ---
 
-## All good
+## Все отлично
 
-So now we have a reverse proxy which lets us break UI features out of the monolith. 
+Теперь у нас есть reverse-proxy, которая позволяет нам отделить UI часть от монолита. 
 
-We're running a new homepage with Vue, but we could easily use a CMS for the homepage by running Umbraco in a container - or we could replace the Sign Up form with a separate component using Blazor.
+Мы запустили новую домашнюю страницу на Vue, но мы могли бы использовать CMS для домашней страницы или могли бы поменять форму Sign Up на что-то другое.
 
-These small units can be independently deployed, scaled and managed. That makes it easy to release front end changes without regression testing the whole monolith.
+Все эти маленькие части могут быть развернуты независимо, а также масштабированы. Все это облегчает задачу выпуска новых релизов фронтэнд части приложения без необходимости редеплоя и осуществления регресионного тестирования всего монолита.
