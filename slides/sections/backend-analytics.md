@@ -1,4 +1,4 @@
-# Adding Self-service analytics
+﻿# Adding Self-service analytics
 
 ---
 
@@ -16,7 +16,7 @@ We'll be running [Elasticsearch](https://www.elastic.co/products/elasticsearch) 
 
 To get data into Elasticsearch when a user signs up, we just need another message handler, which will listen to the same messages published by the web app.
 
-The new handler is a .NET Core console application. The code is in [QueueWorker.cs](./src/SignUp.MessageHandlers.IndexProspect/Workers/QueueWorker.cs) - it subscribes to the same event messages, then enriches the data and stores it in Elasticsearch.
+The new handler is a .NET Core console application. The code is in [QueueWorker.cs](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.MessageHandlers.IndexProspect/Workers/QueueWorker.cs) - it subscribes to the same event messages, then enriches the data and stores it in Elasticsearch.
 
 ---
 
@@ -24,7 +24,7 @@ The new handler is a .NET Core console application. The code is in [QueueWorker.
 
 The new message handler only uses the message library from the original app, so there are no major dependencies and it can use a different tech stack.
 
-The [Dockerfile](./docker/backend-analytics/index-handler/Dockerfile) follows a similar pattern - stage 1 compiles the app, stage 2 packages it.
+The [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/backend-analytics/index-handler/Dockerfile) follows a similar pattern - stage 1 compiles the app, stage 2 packages it.
 
 
 _ Build the image in the usual way: _
@@ -61,7 +61,7 @@ The [Dockerfile](https://github.com/sixeyed/dockerfiles-windows/blob/master/kiba
 
 ## Run the app with analytics
 
-In the [v5 manifest](./app/v5.yml), none of the existing containers get replaced - their configuration hasn't changed. Only the new containers get created:
+In the [v5 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v5.yml), none of the existing containers get replaced - their configuration hasn't changed. Only the new containers get created:
 
 ```
 cd "$env:workshop"; `

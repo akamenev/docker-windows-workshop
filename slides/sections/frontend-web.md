@@ -14,7 +14,7 @@ Right now the web app is a monolith. By the end of the workshop we'll have broke
 
 ## Build the web app image
 
-Check out the [Dockerfile](./docker/frontend-web/v1/Dockerfile) for the application. It uses Docker to compile the app from source, and package it into an image.
+Check out the [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-web/v1/Dockerfile) for the application. It uses Docker to compile the app from source, and package it into an image.
 
 _Build the image:_
 
@@ -29,7 +29,7 @@ docker image build -t dwwx/signup-web `
 
 ## Build a better image
 
-The v1 Dockerfile is simple, but inefficient. The [v2 Dockerfile](./docker/frontend-web/v2/Dockerfile) splits the NuGet restore and MSBuild parts - which makes repeated builds faster. And it relays the application log file.
+The v1 Dockerfile is simple, but inefficient. The [v2 Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-web/v2/Dockerfile) splits the NuGet restore and MSBuild parts - which makes repeated builds faster. And it relays the application log file.
 
 _Build the image:_
 
@@ -89,7 +89,7 @@ docker container rm -f app
 
 ## Run the app - with dependencies
 
-Now  we'll run the database in a container too - using Docker Compose to manage the whole app. Check out the [v1 manifest](./app/v1.yml), it specifies SQL Server and the web app. 
+Now  we'll run the database in a container too - using Docker Compose to manage the whole app. Check out the [v1 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v1.yml), it specifies SQL Server and the web app. 
 
 _Now run the app using compose:_
 

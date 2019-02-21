@@ -16,7 +16,7 @@ We're going to provide that reference data through an API instead.
 
 ## The reference data API
 
-The new component is a simple REST API. You can browse the [source for the Reference Data API](./src/SignUp.Api.ReferenceData) - there's one controller to fetch countries, and another to fetch roles.
+The new component is a simple REST API. You can browse the [source for the Reference Data API](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.Api.ReferenceData) - there's one controller to fetch countries, and another to fetch roles.
 
 The API uses a new technology stack:
 
@@ -29,7 +29,7 @@ We can use new technologies without impacting the monolith, because this compone
 
 ## Build the API
 
-Check out the [Dockerfile](./docker/backend-rest-api/reference-data-api/Dockerfile) for the API. 
+Check out the [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/backend-rest-api/reference-data-api/Dockerfile) for the API. 
 
 It uses the same principle to compile and package the app using containers, but the images use .NET Core running on Nano Server. 
 
@@ -78,7 +78,7 @@ firefox "http://$ip/api/countries"
 
 ## Upgrade to use the new API
 
-Now we can run the app and have the reference data served by the API. Check out the [v3 manifest](./app/v3.yml) - it adds a service for the REST API.
+Now we can run the app and have the reference data served by the API. Check out the [v3 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v3.yml) - it adds a service for the REST API.
 
 The manifest also configures the web app to use the API - using Dependency Injection to load a different implementation of the reference data loader.
 

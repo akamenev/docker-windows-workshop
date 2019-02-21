@@ -1,4 +1,4 @@
-# Production Readiness - Config
+﻿# Production Readiness - Config
 
 ---
 
@@ -16,9 +16,9 @@ We'll do this next, extending the web image to read external configuration.
 
 The app has a [Web.config]() file, which contains setup that will be the same in every environment, and a [log4net.config]() file and [connectionStrings.config]() file which will change.
 
-The [updated Dockerfile](./docker/prod-config/signup-web/Dockerfile) sets that up using environment variables to inject a different source path for the config files.
+The [updated Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-config/signup-web/Dockerfile) sets that up using environment variables to inject a different source path for the config files.
 
-The [startup script](./docker/prod-config/signup-web/startup.ps1) checks those variables, and if they're set it overwrites the default config files with the new sources.
+The [startup script](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-config/signup-web/startup.ps1) checks those variables, and if they're set it overwrites the default config files with the new sources.
 
 ---
 
@@ -54,7 +54,7 @@ docker image build `
 
 We'll swap out the configuration files later when we run the app in a Docker swarm cluster. 
 
-For now we need to make sure we haven't broker the app, so we can run it with the default config in the image. The [v8 manifest](./app/v8.yml) just updates to the new images.
+For now we need to make sure we haven't broker the app, so we can run it with the default config in the image. The [v8 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v8.yml) just updates to the new images.
 
 _ Update the application: _
 

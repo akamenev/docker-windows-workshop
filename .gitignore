@@ -1,6 +1,6 @@
 
 ## slide index file is generated
-slides/index.html
+## slides/index.html
 
 ## stack file is built during the workshop
 docker-stack.yml

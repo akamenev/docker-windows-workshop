@@ -1,4 +1,4 @@
-# Running a Metrics Dashboard
+﻿# Running a Metrics Dashboard
 
 ---
 
@@ -26,7 +26,7 @@ The Prometheus team maintain a Docker image for Linux, but we'll use a Windows D
 
 Prometheus uses a simple configuration file, listing the endpoints to scrape for metrics. 
 
-We'll use [this Dockerfile](./docker/metrics-dashboard/prometheus/Dockerfile) to bundle a custom [prometheus.yml](./docker/metrics-dashboard/prometheus/prometheus.yml) file on top of the existing Prometheus image..
+We'll use [this Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/metrics-dashboard/prometheus/Dockerfile) to bundle a custom [prometheus.yml](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/metrics-dashboard/prometheus/prometheus.yml) file on top of the existing Prometheus image..
 
 ```
 cd $env:workshop; `
@@ -51,7 +51,7 @@ Grafana has an API you can use to automate setup, and we'll use that to build a 
 
 ## Customizing Grafana
 
-To make a custom Grafana image, you need to configure a data source, create users and deploy your own dashboard. The [Grafana Dockerfile](./docker/metrics-dashboard/grafana/Dockerfile) does that.
+To make a custom Grafana image, you need to configure a data source, create users and deploy your own dashboard. The [Grafana Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/metrics-dashboard/grafana/Dockerfile) does that.
 
 It uses a [data source provisioning](http://docs.grafana.org/administration/provisioning/#datasources) and [dashboard provisioning](http://docs.grafana.org/administration/provisioning/#dashboards), which is standard Grafana functionality, and the Grafana API to set up a read-only user.
 
@@ -72,7 +72,7 @@ docker image build -t dwwx/grafana `
 
 ## Run the app with metrics
 
-Now you can deploy the updated application. The [v6 manifest](./app/v6.yml) uses the upgraded web app and message handlers, and includes containers for Prometheus and Grafana.
+Now you can deploy the updated application. The [v6 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v6.yml) uses the upgraded web app and message handlers, and includes containers for Prometheus and Grafana.
 
 _ Update the running application: _
 

@@ -1,4 +1,4 @@
-# Dockerfiles and Docker Images
+﻿# Dockerfiles and Docker Images
 
 ---
 
@@ -14,7 +14,7 @@ The Dockerfile syntax is straightforward. In this section you'll walk through tw
 
 ## ASP.NET apps in Docker
 
-Have a look at the [Dockerfile for this app](./docker/101-dockerfiles-and-images/hostname-app/Dockerfile). It builds a simple ASP.NET website that displays the host name of the server. There are only two instructions:
+Have a look at the [Dockerfile for this app](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/101-dockerfiles-and-images/hostname-app/Dockerfile). It builds a simple ASP.NET website that displays the host name of the server. There are only two instructions:
 
 - [FROM](https://docs.docker.com/engine/reference/builder/#from) specifes the image to use as the starting point for this image
 - [COPY](https://docs.docker.com/engine/reference/builder/#copy) copies a file from the host into the image, at a known location.
@@ -142,10 +142,10 @@ docker container logs app-0
 
 ## Build and run a more complex web app
 
-The next [Dockerfile](./docker/101-dockerfiles-and-images/tweet-app/Dockerfile) fixes those issues. These are the main features:
+The next [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/101-dockerfiles-and-images/tweet-app/Dockerfile) fixes those issues. These are the main features:
 
 - it configures IIS to write all log output to a single file
-- it copies a [startup script](./docker/101-dockerfiles-and-images/tweet-app/start.ps1) and [HTML page](./docker/101-dockerfiles-and-images/tweet-app/index.html) into the image
+- it copies a [startup script](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/101-dockerfiles-and-images/tweet-app/start.ps1) and [HTML page](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/101-dockerfiles-and-images/tweet-app/index.html) into the image
 - the startup script relays all the IIS log file entries to the console
 - it adds a [HEALTHCHECK](https://docs.docker.com/engine/reference/builder/#healthcheck) which Docker will use to see if the app is healthy
 

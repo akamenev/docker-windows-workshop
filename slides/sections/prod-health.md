@@ -1,4 +1,4 @@
-# Production Readiness - Health
+﻿# Production Readiness - Health
 
 ---
 
@@ -18,13 +18,13 @@ We'll use the other option, bundling a healthcheck utility in the Docker image.
 
 The utility is another .NET Framework console app. It just makes an HTTP GET to the app running locally in the container.
 
-In the [Program class](./src/Utilities.HealthCheck/Program.cs) the utility expects the site to return a `200 OK` response, within 200 milliseconds. If it doesn't do that, the health check returns an exit code of `1`, meaning failure.
+In the [Program class](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/Utilities.HealthCheck/Program.cs) the utility expects the site to return a `200 OK` response, within 200 milliseconds. If it doesn't do that, the health check returns an exit code of `1`, meaning failure.
 
 ---
 
 ## Packaging the health checker
 
-There's another new stage in the [updated Dockerfile](./docker/prod-health/signup-web/Dockerfile) - it builds the health check utility from source. 
+There's another new stage in the [updated Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-health/signup-web/Dockerfile) - it builds the health check utility from source. 
 
 Then the output is copied into the final Docker image, alongside the original ASP.NET app and the dependency checker.
 
@@ -48,7 +48,7 @@ docker image build `
 
 ## Upgrade the app
 
-The [v10 manifest](./app/v10.yml) uses the upgraded web app, and it specifies a different schedule for the healthcheck.
+The [v10 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v10.yml) uses the upgraded web app, and it specifies a different schedule for the healthcheck.
 
 _ Update the application: _
 

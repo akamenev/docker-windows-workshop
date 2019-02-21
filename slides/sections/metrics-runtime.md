@@ -1,4 +1,4 @@
-# Exporting Runtime Metrics
+﻿# Exporting Runtime Metrics
 
 ---
 
@@ -18,7 +18,7 @@ You can export IIS Performance Counters from web containers to get key metrics w
 
 ## Expose IIS metrics from the web app
 
-Here's a new version of the [web application Dockerfile](./docker/metrics-runtime/signup-web/Dockerfile). It packages a metrics exporter utility.
+Here's a new version of the [web application Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/metrics-runtime/signup-web/Dockerfile). It packages a metrics exporter utility.
 
 The utility app reads from Windows Performance Counters and publishes them as an API on port `50505`.
 

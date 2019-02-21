@@ -1,4 +1,4 @@
-# Production Readiness - Logging
+﻿# Production Readiness - Logging
 
 ---
 
@@ -6,15 +6,15 @@
 
 ---
 
-This web app uses `log4net` which is [configured](./src/SignUp.Web/log4net.config) to write log entries to a file on the C drive.
+This web app uses `log4net` which is [configured](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.Web/log4net.config) to write log entries to a file on the C drive.
 
 Those log entries are being written inside the container, we just need to read them from the file back out to Docker.
 
 ---
 
-[The new Dockerfile](./docker/prod-logging/signup-web/Dockerfile) uses a [Docker volume](https://docs.docker.com/storage/volumes/) for the path `C:\logs`, which is where the log file gets written. That means the log data is stored outside of the container using Docker's pluggable volume system.
+[The new Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-logging/signup-web/Dockerfile) uses a [Docker volume](https://docs.docker.com/storage/volumes/) for the path `C:\logs`, which is where the log file gets written. That means the log data is stored outside of the container using Docker's pluggable volume system.
 
-And the [startup script](./docker/prod-logging/signup-web/startup.ps1) has been extended, so it ends by tailing the log file - relaying all the log entries to the console, which Docker is monitoring.
+And the [startup script](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-logging/signup-web/startup.ps1) has been extended, so it ends by tailing the log file - relaying all the log entries to the console, which Docker is monitoring.
 
 ---
 
@@ -33,7 +33,7 @@ docker image build -t dwwx/signup-web:v4 `
 
 ## Run the app with logs
 
-The [v7 manifest](./app/v7.yml) uses the upgraded web app, which echoes the existing `log4net` log entries back out to Docker. It also maps the log volume to a local directory on the VM.
+The [v7 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v7.yml) uses the upgraded web app, which echoes the existing `log4net` log entries back out to Docker. It also maps the log volume to a local directory on the VM.
 
 _ Create the log folder and update the application: _
 

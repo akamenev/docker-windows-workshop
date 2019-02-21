@@ -1,4 +1,4 @@
-# Exporting Application Metrics
+﻿# Exporting Application Metrics
 
 ---
 
@@ -12,7 +12,7 @@ We'll add application metrics to the message handlers, so we can see the flow of
 
 The message handlers already have code to record metrics when they handle messages. 
 
-You can see this in the [Program.cs](./src/SignUp.MessageHandlers.SaveProspect/Program.cs) file for the SQL Server handler, and the [QueueWorker.cs](./src/SignUp.MessageHandlers.IndexProspect/Workers/QueueWorker.cs) file for the Elasticsearch handler.
+You can see this in the [Program.cs](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.MessageHandlers.SaveProspect/Program.cs) file for the SQL Server handler, and the [QueueWorker.cs](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.MessageHandlers.IndexProspect/Workers/QueueWorker.cs) file for the Elasticsearch handler.
 
 > Both handlers use a community Prometheus package on NuGet, [prometheus-net](https://github.com/prometheus-net/prometheus-net). It's a .NET Standard library, so you can use it from .NET Framework and .NET Core apps.
 
@@ -28,7 +28,7 @@ You should record metrics at a fairly coarse level - "Event count" in this examp
 
 ## Build new versions of the handlers
 
-There's a new [Dockerfile for the save handler](./docker/metrics-application/save-handler/Dockerfile) and a new [Dockerfile for the index handler](./docker/metrics-application/index-handler/Dockerfile). They package the same code, but they set default config values to enable the metrics API.
+There's a new [Dockerfile for the save handler](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/metrics-application/save-handler/Dockerfile) and a new [Dockerfile for the index handler](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/metrics-application/index-handler/Dockerfile). They package the same code, but they set default config values to enable the metrics API.
 
 ```
 cd $env:workshop; `

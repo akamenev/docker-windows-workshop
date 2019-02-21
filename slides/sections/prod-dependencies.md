@@ -1,4 +1,4 @@
-# Production Readiness - Dependencies
+﻿# Production Readiness - Dependencies
 
 ---
 
@@ -18,17 +18,17 @@ We'll add that functionality to our old ASP.NET app by packaging a dependency ch
 
 The utility is just a .NET Framework console app. It uses the same configuration structure as the ASP.NET app, so it will use the same settings as the app.
 
-In the [Program class](./src/Utilities.DependencyCheck/Program.cs) the app uses [Polly](https://github.com/App-vNext/Polly) to wrap a SQL connection check. It retries three times to connect to SQL Server, and if the third attempt fails, the utility returns an exit code of `1`.
+In the [Program class](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/Utilities.DependencyCheck/Program.cs) the app uses [Polly](https://github.com/App-vNext/Polly) to wrap a SQL connection check. It retries three times to connect to SQL Server, and if the third attempt fails, the utility returns an exit code of `1`.
 
 ---
 
 ## Packaging the dependency checker
 
-A new stage in the [updated Dockerfile](./docker/prod-dependencies/signup-web/Dockerfile) builds the dependency checker from source. The output is copied into the final Docker image, alongside the original ASP.NET app.
+A new stage in the [updated Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-dependencies/signup-web/Dockerfile) builds the dependency checker from source. The output is copied into the final Docker image, alongside the original ASP.NET app.
 
 There's also a new environment variable `DEPENDENCY_CHECK_ENABLED`, used to turn the dependency check off in dev environments.
 
-In the [startup script](./docker/prod-dependencies/signup-web/startup.ps1) that flag gets checked, and if it's set then the dependency checker gets run.
+In the [startup script](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-dependencies/signup-web/startup.ps1) that flag gets checked, and if it's set then the dependency checker gets run.
 
 ---
 
@@ -78,9 +78,9 @@ docker container run -it `
 
 Ah. It was stored in the filesystem of that container we've just destroyed, so it's gone forever.
 
-Let's make sure that doesn't happen again. This [Dockerfile for the database](./docker/prod-dependencies/signup-db/Dockerfile) is based on Microsoft's SQL Server image, but it adds a Docker volume for data storage.
+Let's make sure that doesn't happen again. This [Dockerfile for the database](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-dependencies/signup-db/Dockerfile) is based on Microsoft's SQL Server image, but it adds a Docker volume for data storage.
 
-The [initialization script](./docker/prod-dependencies/signup-db/Initialize-Database.ps1) checks that storage location, and it will eiother create a new database, or attach existing database files if they exist.
+The [initialization script](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/prod-dependencies/signup-db/Initialize-Database.ps1) checks that storage location, and it will eiother create a new database, or attach existing database files if they exist.
 
 ---
 
@@ -102,7 +102,7 @@ docker image build `
 
 ## Run the app with the new images
 
-The [v9 manifest](./app/v9.yml) uses the upgraded web app and database images. It also mounts the database volume from a folder on the host.
+The [v9 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v9.yml) uses the upgraded web app and database images. It also mounts the database volume from a folder on the host.
 
 _ Create the folder and update the application: _
 

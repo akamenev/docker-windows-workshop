@@ -1,4 +1,4 @@
-# Deploying Stacks to Docker Swarm
+﻿# Deploying Stacks to Docker Swarm
 
 ---
 
@@ -91,7 +91,7 @@ The output will list all the nodes in the swarm. You should have one manager and
 
 You deploy apps to swarm using Docker Compose files. There are some attributes which only apply to swarm mode (like the `deploy` section), and some which are ignored in swarm mode (like `depends_on`).
 
-You can combine multiple compose files to make a single file. That's useful for keeping the core solution in one compose file like [v11-core.yml](./app/v11-core.yml), and adding environment-specific overrides in other files like [v11-dev.yml](./app/v11-dev.yml) and [v11-prod.yml](./app/v11-prod.yml).
+You can combine multiple compose files to make a single file. That's useful for keeping the core solution in one compose file like [v11-core.yml](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v11-core.yml), and adding environment-specific overrides in other files like [v11-dev.yml](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v11-dev.yml) and [v11-prod.yml](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v11-prod.yml).
 
 ---
 
@@ -127,7 +127,7 @@ Docker surfaces config data as files inside the container, so it's all transpare
 
 There are two ways to store configuration data in Docker swarm. You use config objects for data which isn't confidential.
 
-_ Store the [log4net.config](./app/configs/log4net.config) file in the swarm: _
+_ Store the [log4net.config](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/configs/log4net.config) file in the swarm: _
 
 ```
 docker config create `
@@ -155,7 +155,7 @@ docker config inspect --pretty netfx-log4net
 
 > This part is for the **manager**
 
-_ Store the [connectionStrings.config](./app/secrets/connectionStrings.config) file in the swarm: _
+_ Store the [connectionStrings.config](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/secrets/connectionStrings.config) file in the swarm: _
 
 
 ```
