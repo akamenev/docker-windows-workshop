@@ -1,6 +1,6 @@
 ﻿# Intro
 
-Welcome to the workshop :)
+Добро пожаловать на воркшоп :)
 
 ---
 
