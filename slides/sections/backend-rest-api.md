@@ -6,34 +6,34 @@
 
 ---
 
-Docker makes it easy to run features in separate containers, and takes care of communication between containers.
+Docker позволяет запускать отдельные фичи в контейнерах, а также обеспечивает коммуникацию между контейнерами.
 
-Right now the web application loads reference data direct from the database - that's the list of countries and roles in the dropdown boxes.
+Сейчас наше приложение загружает референсные данные напрямую из базы данных - список стран и список ролей из выпадающих списков.
 
-We're going to provide that reference data through an API instead.
+Мы это поменяем и будем отдавать эти списки через Data Reference API.
 
 ---
 
 ## The reference data API
 
-The new component is a simple REST API. You can browse the [source for the Reference Data API](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.Api.ReferenceData) - there's one controller to fetch countries, and another to fetch roles.
+Новый компонент это простой REST API. Вы можете посмотреть [исходный код для Reference Data API](https://github.com/akamenev/docker-windows-workshop/tree/master/src/SignUp.Api.ReferenceData) - в нем содержится один контроллер для стран и другой для ролей.
 
-The API uses a new technology stack:
+API использует новый технологический стэк:
 
-- [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.1) as a fast, cross-platform alternative to full ASP.NET
-- [Dapper](https://github.com/StackExchange/Dapper) as a fast, lightweight ORM
+- [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.1) как более быстрая и кросс-платформенная альтернатива ASP.NET
+- [Dapper](https://github.com/StackExchange/Dapper) как быстрый и легковесный ORM
 
-We can use new technologies without impacting the monolith, because this component runs in a separate container.
+Мы можем использовать эти новые технологии не затрагивая при этом монолит, потому что эти компоненты работают в отдельных контейнерах
 
 ---
 
-## Build the API
+## Соберите API
 
-Check out the [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/backend-rest-api/reference-data-api/Dockerfile) for the API. 
+Посмотрите [Dockerfile](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/backend-rest-api/reference-data-api/Dockerfile) для API. 
 
-It uses the same principle to compile and package the app using containers, but the images use .NET Core running on Nano Server. 
+Он использует тот же принцип для сборки и упаковки приложения, только используются образы .NET Core.
 
-_Build the API image:_
+_Соберите API image:_
 
 ```
 docker image build `
@@ -43,13 +43,13 @@ docker image build `
 
 ---
 
-## Run the new API
+## Запустите новый API
 
-You can run the API on its own, but it needs to connect to SQL Server. 
+Вы можете запустить API сам по себе, но ему нужен доступ в SQL Server. 
 
-The image bundles a default database connection string, and you can override it when you run containers with an environment variable.
+В образе уже есть connection string по умолчанию, которую мы можем перезаписать с помощью переменных окружения.
 
-_Run the API, connecting it to the existing SQL container:_
+_Запустите API с соединением к контейнеру с SQL:_
 
 ```
 docker container run -d -p 8060:80 --name api `
@@ -59,11 +59,11 @@ docker container run -d -p 8060:80 --name api `
 
 ---
 
-## Try it out
+## Перейдите на API
 
-The API is available on port `8060` on your Docker host, so you can browse there or direct to the container:
+API доступен по порту `8060` на виртуальной машине, можете перейти туда или напрямую в контейнер:
 
-_Get the API container's IP and launch the browser:_
+_Получите IP контейнера и запустите браузер:_
 
 ```
 $ip = docker container inspect `
@@ -72,17 +72,17 @@ $ip = docker container inspect `
 firefox "http://$ip/api/countries"
 ```
 
-> Replace `/countries` with `/roles` to see the other dataset
+> Поменяйте `/countries` на `/roles` чтобы увидеть другой датасет
 
 ---
 
-## Upgrade to use the new API
+## Обновите приложения для использования API
 
-Now we can run the app and have the reference data served by the API. Check out the [v3 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v3.yml) - it adds a service for the REST API.
+Теперь мы можем запустить приложение с использованием нового API. Посмотрите на [v3 manifest](https://github.com/akamenev/docker-windows-workshop/blob/master/app/v3.yml) - он добавляет REST API.
 
-The manifest also configures the web app to use the API - using Dependency Injection to load a different implementation of the reference data loader.
+Манифест также конфигурирует web app для использования API.
 
-_Upgrade to v3:_
+_Обновитесь до v3:_
 
 ```
 docker-compose -f .\app\v3.yml up -d
@@ -90,11 +90,11 @@ docker-compose -f .\app\v3.yml up -d
 
 ---
 
-## Check what's running
+## Проверьте что запущено
 
-There are lots of containers running now - the original web app and database, the new homepage and reverse proxy, and the new REST API.
+В данный момент уже запущено много контейнеров - первоначальное приложение и база данных, новая домашняя страница, reverse-proxy и новый API
 
-_List all the running containers:_
+_Выведите список запущенных контейнеров:_
 
 ```
 docker container ls
@@ -102,9 +102,9 @@ docker container ls
 
 ---
 
-## Try the new distributed app
+## Попробуйте новое распределенное приложение
 
-The entrypoint is still the proxy listening on port `8020`, so you can browse there or to the container:
+Входная точка все еще прокси, работающая на порту  `8020`, можете перейти туда или по адресу контейнера:
 
 ```
 $ip = docker container inspect `
@@ -113,17 +113,17 @@ $ip = docker container inspect `
 firefox "http://$ip"
 ```
 
-> Now when you click through to the original _Sign Up_ page, the dropdowns are loaded from the API.
+> Теперь когда вы нажимаете на _Sign Up_ page, выпадающие списки подгружаются из API.
 
 ---
 
-## Let's just check that
+## Давайте проверим это
 
-The new REST API writes log entries to the console, which Docker can read from the container. 
+Новый REST API логгирует обращения в консоль.
 
-The logs will show that the countries and roles controllers have been called - the request came from the web app.
+Логи покажут, что контроллеры для стран и ролей были вызваны веб-приложением
 
-_Check the logs:_
+_Посмотрите логи:_
 
 ```
 docker container logs app_reference-data-api_1
@@ -131,13 +131,11 @@ docker container logs app_reference-data-api_1
 
 ---
 
-## And just to be sure
+## Ну и давайте убедимся наверняка
 
-The API uses a different ORM from the main app, but the entity classes are shared, so the reference data codes match up.
+Нажмите _Sign Up!_, заполните форму и нажмите _Go!_ чтобы сохранить данные.
 
-Click the _Sign Up!_ button, fill in the form and click _Go!_ to save your details.
-
-_Check the new data is there in the SQL container:_
+_Проверьте,что данные появились в SQL контейнере:_
 
 ```
 docker container exec app_signup-db_1 powershell `
@@ -146,12 +144,12 @@ docker container exec app_signup-db_1 powershell `
 
 ---
 
-## All good
+## Все ок
 
-Now we've got a small, fast REST API providing a reference data service. It's only available to the web app right now, but we could easily make it publicly accessible.
+Теперь у нас есть небольшой, быстрый REST API, предоставляющий нам референс данные. Он доступен только для веб приложения, но мы можем сделать его доступным публично.
 
-How? Just by adding a new routing rule in the reverse proxy that's already part of our app. It could direct `/api` requests into the API container.
+Как? Добавлением правила машрутизации в наш reverse-proxy, который был развенут ранее. Мы можем перенаправлять запросы, которые приходят на `/api` в контейнер с API.
 
-That's something you can try out yourself.
+Можете попробовать сделать это сами.
 
-> Hint: the `location` blocks in `nginx.conf` are where you need to start
+> Подсказка: стоит начать с `location` блоков в `nginx.conf`
