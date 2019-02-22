@@ -27,7 +27,7 @@ docker image build -t dwwx/signup-web `
 
 ---
 
-## Соберем образ получше
+## Соберем образ по-лучше
 
 Первая версия Dockerfile простая, но не очень эффективная. Вторая версия [v2 Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/frontend-web/v2/Dockerfile) разделяет NuGet restore и MSBuild части - это позволяет осуществлять сборки быстрее.
 
