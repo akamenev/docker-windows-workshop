@@ -6,29 +6,29 @@
 
 ---
 
-Right now the app saves data by synchronously connecting to SQL Server. That's a bottleneck which will stop the app performing if there's a peak in traffic.
+На текущий момент, приложение сохраняет данные синхронно, подсоединяясь к SQL серверу. Это узкое место, которое может сильно замедлить работу приложения во время пиковых нагрузок.
 
-We'll fix that by using a message queue instead - running in a Docker container. 
+Это исправим с помощью очереди сообщений, запущенной в контейнере.
 
-When you sign up the web app will publish an event message on the queue, which a message handler picks up and actions. The message handler is a .NET Framework console app running in another container.
+Когда мы будем нажимать `Sign Up` приложение будет публиковать событие в очереди сообщений, которое затем будет обработано message handler'ом. Message handler - это .NET Framework консольное приложение, которое запущено в отдельном контейнере
 
 ---
 
 ## The save message handler
 
-The new component is a simple .NET Console app. You can browse the [source for the save message handler](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.MessageHandlers.SaveProspect) - the work is all done in the `Program` class.
+Новый компонент это простое консольное приложение. Можете ознакомиться с [его исходным кодом](https://github.com/akamenev/docker-windows-workshop/tree/master/src/SignUp.MessageHandlers.SaveProspect) - вся логика описана в Program.cs.
 
-This is a full .NET Framework app, so it can continue to use the original Entity Framework logic from the monolith. It's a low-risk approach to updating the architecture.
+Это такое же .NET Framework приложение как и оригинальное, а значит вы можете использовать логику Entity Framework из монолита. Это самый простой подход к обновлению архитектуры.
 
 ---
 
-## Build the message handler
+## Соберите обработчик сообщений
 
-Check out the [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/backend-async-messaging/save-handler/Dockerfile) for the message handler. 
+Посмотрите на [Dockerfile](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/backend-async-messaging/save-handler/Dockerfile) для обработчика. 
 
-It uses the same principle to compile and package the app using containers, and the images use .NET Framework running on Windows Server Core. 
+Здесь используются все теже принципы сборки и упаковки приложения в контейнере. Используется образ .NET Framework, работающий на Windows Server Core.
 
-_Build the message handler image:_
+_Соберите образ обработчика сообщений:_
 
 ```
 docker image build `
@@ -38,19 +38,19 @@ docker image build `
 
 ---
 
-## Using asynchronous messaging
+## Использование асинхронных сообщений
 
-Check out the [v4 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v4.yml) - it adds services for the message handler and the message queue.
+Посмотрите на [v4 manifest](https://github.com/akamenev/docker-windows-workshop/blob/master/app/v4.yml) - он добавляет сервисы для обработки сообщений и очередь сообщений
 
-The message queue is [NATS](https://nats.io), a high-performance in-memory queue which is ideal for communication between containers.
+Используемая очередь сообщений - [NATS](https://nats.io), это высокопроизводительная in-memory очередь, которая отлично подходит для коммуникации между контейнерами
 
-The manifest also configures the web app to use messaging - using Dependency Injection to load a different implementation of the prospect save handler.
+Манифест также конфигурирует веб приложение для использования сообщений - используется Dependency Injection для загрузки другой реализации обработки сообщений
 
 ---
 
-## Upgrade to use the message handler
+## Обновите приложение для использования сообщений
 
-_Upgrade to v4:_
+_Обновитесь на v4:_
 
 ```
 docker-compose -f .\app\v4.yml up -d
@@ -58,25 +58,25 @@ docker-compose -f .\app\v4.yml up -d
 
 ---
 
-## Check the message handler
+## Проверьте работу обработчика сообщений
 
-You now have a message queue and a message handler running in containers. 
+Теперь у вас есть очередь сообщений и обработчик сообщений в контейнерах.
 
-The message handler writes console log entries, so you can see that it has connected to the queue and is listening for messages.
+Обработчик сообщений пишет в логи все события, поэтому вы можете посмотреть, что происходит в данный момент.
 
-_Check the handler logs:_
+_Посмотрите на логи обработчика сообщений:_
 
 ```
 docker container logs app_signup-save-handler_1
 ```
 
-> You should see that the handler is connected and listening.
+> Вы должны увидеть, что обработчик подключился и ожидает.
 
 ---
 
-## Try the new distributed app
+## Опробуйте новое распределенное приложение
 
-The entrypoint is still the proxy listening on port `8020`, so you can browse there or to the container:
+Входная точка по прежнему на порту `8020`, вы можете перейти туда или в контейнер:
 
 ```
 $ip = docker container inspect `
@@ -85,31 +85,31 @@ $ip = docker container inspect `
 firefox "http://$ip"
 ```
 
-> Now when you submit data, the web app publishes an event and the handler makes the database save
+> Теперь, когда вы отправляете данные, веб приложение публикует событие, а затем обработчик сообщений записывает данные в БД
 
 ---
 
-## Try out the new version
+## Опробуйте новую версию
 
-Click the _Sign Up!_ button, fill in the form and click _Go!_ to save your details.
+Нажмите на _Sign Up!_, заполните форму и нажмите _Go!_ чтобы сохранить данные.
 
-The UX is the same, but the save is asynchronous. You can see that in the logs for the message handler.
+Пользовательский опыт не поменялся, но теперь данные сохраняются асинхронно. Вы можете убедиться в этом, посмотрев логи.
 
-_Check the handler logs:_
+_Посмотрите логи обработчика сообщений:_
 
 ```
 docker container logs app_signup-save-handler_1
 ```
 
-> You should see that the handler has receievd and actioned a message, and it gets an ID back from the database
+> Вы должны увидеть, что обработчик принял и обработал сообщение
 
 ---
 
-## Let's just check that
+## Давайте проверим, что все работает
 
-To be sure, let's make sure the data has really been saved in the database.
+Давайте убедимся, что данные сохранены в БД
 
-_Check the new data is there in the SQL container:_
+_Проверьте наличие новых данных в SQL контейнере:_
 
 ```
 docker container exec app_signup-db_1 powershell `
@@ -118,10 +118,10 @@ docker container exec app_signup-db_1 powershell `
 
 ---
 
-## All good
+## Все отлично
 
-Now we've got an event driven architecture! Well, not completely - but for one key path through our application, we have event publishing.
+Теперь у нас есть event-driven архитектура! Не вся конечно, но в одном из критичных сценариев у нас теперь есть асинхронная обработка запросов.
 
-You can easily extend the app now by adding new message handlers which subscribe to the same event.
+Вы можете достаточно просто масштабировать приложение, добавляя новые копии обработчика сообщений, которые ожидают одно событие
 
-A new message handler could insert data into Elasticsearch and let users run their own analytics with Kibana.
+Следующий обработчик сообщений сможет отправлять данные в Elasticsearch, что позволит пользователям анализировать события приложения в Kibana
