@@ -1,33 +1,32 @@
-﻿# Adding Self-service analytics
+﻿# Добавление Self-service аналитики
 
 ---
 
-<section data-background-image="/img/backend/Slide3.png">
+<section data-background-image="https://github.com/akamenev/docker-windows-workshop/blob/master/slides/img/backend/Slide3.PNG?raw=true">
 
 ---
 
-The app uses SQL Server for storage, which isn't very friendly for business users to get reports. Next we'll add self-service analytics, using enterprise-grade open-source software.
+Приложение использует SQL Server для хранения, который не всегда удобно использовать для бизнес-аналитики. Следующим шагом мы добавим сервис аналитики.
 
-We'll be running [Elasticsearch](https://www.elastic.co/products/elasticsearch) for storage and [Kibana](https://www.elastic.co/products/kibana) to provide an analytics front-end. 
+Мы запустим [Elasticsearch](https://www.elastic.co/products/elasticsearch) для хранения и [Kibana](https://www.elastic.co/products/kibana) для отображения аналитики. 
 
 ---
 
 ## Pub-sub messaging
 
-To get data into Elasticsearch when a user signs up, we just need another message handler, which will listen to the same messages published by the web app.
+Для того, чтобы отправлять данные с каждой новой регистрацией в Elasticsearch, нам нужен отдельный обработчик сообщений. 
 
-The new handler is a .NET Core console application. The code is in [QueueWorker.cs](https://github.com/sixeyed/docker-windows-workshop/blob/master/src/SignUp.MessageHandlers.IndexProspect/Workers/QueueWorker.cs) - it subscribes to the same event messages, then enriches the data and stores it in Elasticsearch.
+Новый обработчик сообщений это .NET Core консольное приложение. Исходный код находится в файле [QueueWorker.cs](https://github.com/akamenev/docker-windows-workshop/blob/master/src/SignUp.MessageHandlers.IndexProspect/Workers/QueueWorker.cs) - он подписывается на события, а затем обогащает данные и отправляет их в Elasticsearch.
 
 ---
 
-## Build the analytics message handler
-
-The new message handler only uses the message library from the original app, so there are no major dependencies and it can use a different tech stack.
-
-The [Dockerfile](https://github.com/sixeyed/docker-windows-workshop/blob/master/docker/backend-analytics/index-handler/Dockerfile) follows a similar pattern - stage 1 compiles the app, stage 2 packages it.
+## Соберите обработчик сообщений для аналитики
 
 
-_ Build the image in the usual way: _
+[Dockerfile](https://github.com/akamenev/docker-windows-workshop/blob/master/docker/backend-analytics/index-handler/Dockerfile) следует уже знакомому нам принципу, сначала собирает приложение, а затем запаковывает его.
+
+
+_ Соберите образ: _
 
 
 ```
@@ -39,29 +38,29 @@ docker image build --tag dwwx/index-handler `
 
 ---
 
-## Running Elasticsearch in Docker
+## Запуск Elasticsearch в Docker
 
-The Elasticsearch team maintain their own Docker image for Linux containers, but not yet for Windows. 
+Команда Elasticsearch поддерживает образ для Linux, но пока что не для Windows. 
 
-It's easy to package your own image to run Elasticsearch in Windows containers, but we'll use one I've already built: `sixeyed/elasticsearch`.
+Достаточно легко собрать свой образ для Elasticsearch в Windows контейнере, но мы воспользуемся тем, который уже собран: `sixeyed/elasticsearch`.
 
-The [Dockerfile](https://github.com/sixeyed/dockerfiles-windows/blob/master/elasticsearch/nanoserver/sac2016/Dockerfile) downloads Elasticsearch and installs it on top of the official OpenJDK image.
-
----
-
-## Running Kibana in Docker
-
-Same story with Kibana, which is the analytics UI that reads from Elasticsearch.
-
-We'll use `sixeyed/kibana`. 
-
-The [Dockerfile](https://github.com/sixeyed/dockerfiles-windows/blob/master/kibana/windowsservercore/ltsc2016/Dockerfile) downloads and installs Kibana, and it packages a [startup script](https://github.com/sixeyed/dockerfiles-windows/blob/master/kibana/windowsservercore/ltsc2016/init.ps1) with some default configuration.
+[Dockerfile](https://github.com/sixeyed/dockerfiles-windows/blob/master/elasticsearch/nanoserver/sac2016/Dockerfile) скачивает Elasticsearch и устанвливает его поверх официального OpenJDK образа.
 
 ---
 
-## Run the app with analytics
+## Запуск Kibana в Docker
 
-In the [v5 manifest](https://github.com/sixeyed/docker-windows-workshop/blob/master/app/v5.yml), none of the existing containers get replaced - their configuration hasn't changed. Only the new containers get created:
+Тоже самое делаем и с Kibana.
+
+Мы будем использовать образ `sixeyed/kibana`. 
+
+[Dockerfile](https://github.com/sixeyed/dockerfiles-windows/blob/master/kibana/windowsservercore/ltsc2016/Dockerfile) скачивает и устанавливает Kibana, и собирает [startup script](https://github.com/sixeyed/dockerfiles-windows/blob/master/kibana/windowsservercore/ltsc2016/init.ps1) с параметрами по-умолчанию.
+
+---
+
+## Запускаем приложение с аналитикой
+
+В [v5 manifest](https://github.com/akamenev/docker-windows-workshop/blob/master/app/v5.yml), ни один из существующих контейнеров не был заменен - их конфигурация не поменялась. Добавляются только новые контейнеры:
 
 ```
 cd "$env:workshop"; `
@@ -71,17 +70,17 @@ docker-compose -f .\app\v5.yml up -d
 
 ---
 
-## Refresh your browser
+## Обновите страницу в браузере
 
-Go back to the sign-up page in your browser. **It's the same IP address** because the app container hasn't been replaced here. 
+Вернитесь на страницу sign-up в браузере. **Это тот же IP адрес** потому что контейнер с приложением не был заменен. 
 
-Add another user and you'll see the data still gets added to SQL Server, but now both message handlers have log entries showing they handled the event message.
+Добавьте другого пользователя и вы увидите, что данные появились в SQL Server, но теперь оба обработчика сообщений записали в лог, что они обработали сообщение.
 
 ---
 
-## Check the new data is stored 
+## Проверьте, что данные сохранены
 
-And the logs in the message handlers:
+И логи в обработчиках сообщений:
 
  ```
 docker container exec app_signup-db_1 powershell `
@@ -92,15 +91,15 @@ docker container logs app_signup-save-handler_1; `
 docker container logs app_signup-index-handler_1
 ```
 
-> You can add a few more users with different roles and countries, if you want to see a nice spread of data in Kibana.
+> Можете добавить несколько новых пользователей с разными ролями и странами, чтобы появилось больше данных в Kibana.
 
 ---
 
-## Explore the data in Kibana
+## Посмотрите данные в Kibana
 
-Kibana is also a web app running in a container, listening on port 5601.
+Kibana также является веб-приложением, работающим в контейнере, работающее на порту 5601.
 
-_Get the Kibana container's IP address and browse:_
+_Получите IP адрес контейнера с:_
 
 ```
 $ip = docker container inspect --format '{{ .NetworkSettings.Networks.nat.IPAddress }}' app_kibana_1; `
@@ -108,12 +107,12 @@ $ip = docker container inspect --format '{{ .NetworkSettings.Networks.nat.IPAddr
 firefox "http://$($ip):5601"
 ```
 
-> The Elasticsearch index is called `prospects`, and you can navigate around the data in Kibana. 
+> Индекс в Elasticsearch называется `prospects`, выбрав его, вы можете увидеть данные в Kibana. 
 
 ---
 
 ## Zero-downtime deployment
 
-The new event-driven architecture lets you add powerful features without updating the original monolith.
+Новая event-driven архитектура позволяет вам добавлять различные фичи без обновления основного монолитного приложения.
 
-There's no regresison testing to do for this release, the new analytics functionality won't impact the original app, and power users can build their own Kibana dashboards.
+Нет необходимости проводить регресионный анализ для этого релиза, так как функционал аналитики никак не задевает оригинальное приложение.
